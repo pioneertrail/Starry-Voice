@@ -35,10 +35,14 @@ def main():
             print(f"{voice_name}: {description}")
         print("-" * 50)
 
-        # Get voice selection
-        voice_name = input("\nSelect a voice (or 'quit' to exit): ").strip().lower()
-        if voice_name == 'quit':
-            return
+        # Get voice selection with proper input handling
+        while True:
+            voice_name = input("\nSelect a voice (or 'quit' to exit): ").strip().lower()
+            if voice_name == 'quit':
+                return
+            if voice_name in voice_chat.VOICE_SETTINGS:
+                break
+            print(f"Invalid voice name. Please choose from: {', '.join(voice_chat.VOICE_SETTINGS.keys())}")
 
         # Start voice chat
         voice_chat.start(voice_name)

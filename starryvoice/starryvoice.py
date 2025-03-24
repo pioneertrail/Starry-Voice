@@ -40,52 +40,6 @@ if not model_path.exists():
 model = Model(str(model_path))
 recognizer = KaldiRecognizer(model, 16000)
 
-# Configure voice settings
-VOICE_SETTINGS = {
-    "nova": {
-        "name": "nova",
-        "rate": 150,
-        "volume": 1.0,
-        "pitch": 1.2,
-        "description": "Bright and energetic voice"
-    },
-    "alloy": {
-        "name": "alloy",
-        "rate": 130,
-        "volume": 0.9,
-        "pitch": 1.0,
-        "description": "Balanced and clear voice"
-    },
-    "echo": {
-        "name": "echo",
-        "rate": 140,
-        "volume": 1.0,
-        "pitch": 0.9,
-        "description": "Deep and resonant voice"
-    },
-    "fable": {
-        "name": "fable",
-        "rate": 145,
-        "volume": 0.95,
-        "pitch": 1.1,
-        "description": "Warm and engaging voice"
-    },
-    "onyx": {
-        "name": "onyx",
-        "rate": 135,
-        "volume": 1.0,
-        "pitch": 0.95,
-        "description": "Smooth and professional voice"
-    },
-    "shimmer": {
-        "name": "shimmer",
-        "rate": 155,
-        "volume": 0.9,
-        "pitch": 1.15,
-        "description": "Light and cheerful voice"
-    }
-}
-
 # Initialize pyttsx3 engine
 try:
     TTS_ENGINE = pyttsx3.init()
@@ -352,29 +306,60 @@ def get_ai_response(text):
         return "I apologize, but I encountered an error. Please try again."
 
 class VoiceChat:
-    """Main voice chat application class.
+    """Main voice chat class that handles conversation with AI."""
     
-    This class handles the core functionality of the voice chat application,
-    including audio recording, speech-to-text conversion, AI response generation,
-    and text-to-speech synthesis.
-    
-    Attributes:
-        client (OpenAI): The OpenAI client instance
-        audio_pool (AudioFilePool): Pool for managing temporary audio files
-        conversation_history (List[Dict[str, str]]): History of the conversation
-        current_voice (Dict[str, Any]): Current voice settings
-    """
-    
-    def __init__(self, client: OpenAI):
-        """Initialize the voice chat application.
-        
-        Args:
-            client (OpenAI): An initialized OpenAI client instance
-        """
+    # Voice settings
+    VOICE_SETTINGS = {
+        "nova": {
+            "name": "nova",
+            "rate": 150,
+            "volume": 1.0,
+            "pitch": 1.2,
+            "description": "Bright and energetic voice"
+        },
+        "alloy": {
+            "name": "alloy",
+            "rate": 130,
+            "volume": 0.9,
+            "pitch": 1.0,
+            "description": "Balanced and clear voice"
+        },
+        "echo": {
+            "name": "echo",
+            "rate": 140,
+            "volume": 1.0,
+            "pitch": 0.9,
+            "description": "Deep and resonant voice"
+        },
+        "fable": {
+            "name": "fable",
+            "rate": 145,
+            "volume": 0.95,
+            "pitch": 1.1,
+            "description": "Warm and engaging voice"
+        },
+        "onyx": {
+            "name": "onyx",
+            "rate": 135,
+            "volume": 1.0,
+            "pitch": 0.95,
+            "description": "Smooth and professional voice"
+        },
+        "shimmer": {
+            "name": "shimmer",
+            "rate": 155,
+            "volume": 0.9,
+            "pitch": 1.15,
+            "description": "Light and cheerful voice"
+        }
+    }
+
+    def __init__(self, client):
+        """Initialize voice chat with OpenAI client."""
         self.client = client
         self.audio_pool = AudioFilePool()
-        self.conversation_history: List[Dict[str, str]] = []
-        self.current_voice: Optional[Dict[str, Any]] = None
+        self.conversation_history = []
+        self.current_voice = None
         logger.info("Voice chat initialized successfully")
 
     def start(self, voice_name: str) -> None:
@@ -389,10 +374,10 @@ class VoiceChat:
         """
         try:
             # Set up voice settings
-            if voice_name not in VOICE_SETTINGS:
+            if voice_name not in self.VOICE_SETTINGS:
                 raise ValueError(f"Invalid voice name: {voice_name}")
             
-            self.current_voice = VOICE_SETTINGS[voice_name]
+            self.current_voice = self.VOICE_SETTINGS[voice_name]
             logger.info(f"Selected voice: {voice_name}")
 
             print(f"\nVoice chat started with {voice_name}!")

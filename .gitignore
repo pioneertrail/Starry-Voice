@@ -79,4 +79,11 @@ share/python-wheels/
 *.egg-info/
 .installed.cfg
 *.egg
-MANIFEST 
+MANIFEST
+
+# Generated audio files
+*.wav
+*.mp3
+response.mp3
+input.wav
+test_recording.wav 
